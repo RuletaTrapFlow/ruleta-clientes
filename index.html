@@ -163,12 +163,9 @@
         document.getElementById("result").innerText = `🎉 Felicidades, ganaste: ${premio}`;
         document.getElementById("spinBtn").disabled = true;
 
-        // Enviar premio por POST
-        fetch(apiURL, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ codigo: codigoUsado, premio: premio })
-        });
+        // Enviar premio por GET
+fetch(`${apiURL}?codigo=${codigoUsado}&premio=${encodeURIComponent(premio)}`);
+
       }, 5200);
     }
   </script>
