@@ -15,12 +15,22 @@
       background-color: #f2f2f2;
       padding: 20px;
     }
-    h2 { margin-top: 0; }
-    #inputArea, #wheelContainer, #result { margin: 20px 0; }
+    h2 {
+      margin-top: 0;
+      text-align: center;
+    }
+    #inputArea, #wheelContainer, #result {
+      margin: 20px 0;
+      width: 100%;
+      max-width: 360px;
+      text-align: center;
+    }
     input, button {
       font-size: 1rem;
       padding: 10px;
       margin-top: 10px;
+      width: 100%;
+      box-sizing: border-box;
     }
     #wheel {
       width: 300px;
@@ -31,6 +41,7 @@
       overflow: hidden;
       transform: rotate(0deg);
       transition: transform 5s ease-out;
+      margin: 0 auto;
     }
     .slice {
       width: 50%;
@@ -41,15 +52,16 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 14px;
+      font-size: 12px;
       text-align: center;
       color: white;
+      padding: 5px;
     }
     .slice0 { background-color: #00bcd4; transform: rotate(0deg); }
-    .slice1 { background-color: #fbc02d; transform: rotate(54deg); }
-    .slice2 { background-color: #e91e63; transform: rotate(126deg); }
-    .slice3 { background-color: #4caf50; transform: rotate(198deg); }
-    .slice4 { background-color: #9c27b0; transform: rotate(270deg); }
+    .slice1 { background-color: #fbc02d; transform: rotate(72deg); }
+    .slice2 { background-color: #e91e63; transform: rotate(144deg); }
+    .slice3 { background-color: #4caf50; transform: rotate(216deg); }
+    .slice4 { background-color: #9c27b0; transform: rotate(288deg); }
     #pointer {
       width: 0; height: 0;
       border-left: 20px solid transparent;
@@ -59,8 +71,18 @@
       top: -30px;
       left: calc(50% - 20px);
     }
-    #spinBtn { background-color: orange; color: white; border: none; cursor: pointer; }
-    #result { font-size: 1.2rem; font-weight: bold; color: #333; }
+    #spinBtn {
+      background-color: orange;
+      color: white;
+      border: none;
+      cursor: pointer;
+      margin-top: 20px;
+    }
+    #result {
+      font-size: 1.2rem;
+      font-weight: bold;
+      color: #333;
+    }
   </style>
 </head>
 <body>
@@ -76,8 +98,7 @@
       <div class="slice slice0">ENVÍO GRATIS</div>
       <div class="slice slice1">REGALO SORPRESA</div>
       <div class="slice slice2">10% DESCUENTO (Máx $4.000)</div>
-      <div class="slice slice3">15% DESCUENTO
-        EN COMPRAS > $40.000</div>
+      <div class="slice slice3">15% DESCUENTO EN COMPRAS > $40.000</div>
       <div class="slice slice4">REGALO SORPRESA</div>
     </div>
     <button id="spinBtn" onclick="girarRuleta()">GIRAR</button>
@@ -87,7 +108,8 @@
 
   <script>
     let puedeGirar = false;
-    const apiURL = "https://script.google.com/macros/s/AKfycbzphNiIEay3-Yy8v9f3SsKXnyHelukINCo-A0h9cK9Kb1zuOovtqkbeW2zAQ8uQuTV-/exec";
+    let codigoUsado = "";
+    const apiURL = "https://script.google.com/macros/s/AKfycbzhNilEay3-Yy8v9f3SsKXnyHelukINCo-A0h9cK9Kb1zuOovtqkbeW2zAQ8uQuTV-/exec";
 
     function validarCodigo() {
       const codigo = document.getElementById("codigo").value.trim();
@@ -96,6 +118,7 @@
         .then(res => res.text())
         .then(data => {
           if (data === "valido") {
+            codigoUsado = codigo;
             document.getElementById("inputArea").style.display = "none";
             document.getElementById("wheelContainer").style.display = "block";
             puedeGirar = true;
@@ -111,9 +134,14 @@
       if (!puedeGirar) return;
       puedeGirar = false;
 
-      // Distribución de premios por probabilidad
-      const opciones = ["ENVÍO GRATIS", "REGALO SORPRESA", "10% DESCUENTO (Máx $4.000)", "15% DESCUENTO EN COMPRAS > $40.000"];
-      const pesos = [15, 55, 20, 10];
+      const opciones = [
+        "ENVÍO GRATIS",
+        "REGALO SORPRESA",
+        "10% DESCUENTO (Máx $4.000)",
+        "15% DESCUENTO EN COMPRAS > $40.000",
+        "REGALO SORPRESA"
+      ];
+      const pesos = [15, 55, 20, 10, 55];
 
       function elegirPremio() {
         const total = pesos.reduce((a, b) => a + b);
@@ -134,6 +162,15 @@
         const premio = opciones[premioIndex];
         document.getElementById("result").innerText = `🎉 Felicidades, ganaste: ${premio}`;
         document.getElementById("spinBtn").disabled = true;
+
+        // Enviar premio a Google Sheets mediante POST para asegurar entrega
+        fetch(apiURL, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({ codigo: codigoUsado, premio: premio })
+        });
       }, 5200);
     }
   </script>
