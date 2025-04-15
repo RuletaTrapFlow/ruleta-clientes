@@ -7,21 +7,25 @@
   <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&display=swap" rel="stylesheet">
   <style>
     body {
+      margin: 0;
       font-family: 'Fredoka One', cursive;
-      background: linear-gradient(135deg, #000000, #1c1c1c);
-      color: white;
+      background: linear-gradient(to bottom, #141414, #1e1e1e);
+      color: #fff;
       text-align: center;
       padding: 20px;
     }
     img.logo {
-      width: 180px;
-      margin-bottom: 20px;
+      width: 160px;
+      margin-bottom: 10px;
+    }
+    h2 {
+      margin-top: 0;
     }
     #wheel {
       width: 320px;
       height: 320px;
       border-radius: 50%;
-      border: 8px solid #e50914;
+      border: 8px solid #ff3c3c;
       margin: 20px auto;
       position: relative;
       transition: transform 5s ease-out;
@@ -38,56 +42,63 @@
       justify-content: center;
       color: white;
       font-size: 14px;
-      padding: 10px;
+      padding: 5px;
       text-align: center;
     }
     .slice0 { background-color: #e91e63; transform: rotate(0deg); }
-    .slice1 { background-color: #ffc107; transform: rotate(72deg); color: black; }
-    .slice2 { background-color: #9c27b0; transform: rotate(144deg); }
+    .slice1 { background-color: #ffc107; transform: rotate(72deg); }
+    .slice2 { background-color: #4caf50; transform: rotate(144deg); }
     .slice3 { background-color: #03a9f4; transform: rotate(216deg); }
-    .slice4 { background-color: #4caf50; transform: rotate(288deg); }
+    .slice4 { background-color: #9c27b0; transform: rotate(288deg); }
     #pointer {
       width: 0; height: 0;
       border-left: 20px solid transparent;
       border-right: 20px solid transparent;
-      border-bottom: 30px solid #e50914;
+      border-bottom: 30px solid #ff3c3c;
       margin: auto;
     }
     input, button {
-      padding: 10px;
+      padding: 12px;
       font-size: 16px;
-      margin-top: 10px;
+      margin-top: 12px;
       width: 90%;
-      max-width: 300px;
-      border-radius: 10px;
+      max-width: 320px;
       border: none;
+      border-radius: 10px;
     }
-    #spinBtn {
-      background-color: #e50914;
-      color: white;
+    button {
+      background-color: #ff3c3c;
+      color: #fff;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #ff5e5e;
+    }
+    #result {
+      font-weight: bold;
+      margin-top: 30px;
       font-size: 18px;
-      margin-top: 20px;
     }
-    #resultOverlay {
+    #finalMessage {
       display: none;
       position: fixed;
-      top: 0; left: 0; right: 0; bottom: 0;
-      background-color: rgba(0, 0, 0, 0.9);
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background-color: rgba(0,0,0,0.85);
       color: white;
-      z-index: 1000;
+      font-size: 22px;
+      display: flex;
       align-items: center;
       justify-content: center;
-      flex-direction: column;
+      z-index: 999;
+      padding: 30px;
       text-align: center;
-    }
-    #resultOverlay h1 {
-      font-size: 30px;
-      margin-bottom: 10px;
     }
   </style>
 </head>
 <body>
-  <img src="https://raw.githubusercontent.com/ruletatrapflow/ruleta-clientes/main/logo.png" alt="Trap Flow" class="logo">
+  <img src="https://raw.githubusercontent.com/ruletatrapflow/ruleta-clientes/main/logo.png" alt="Trap Flow Logo" class="logo">
   <h2>Introduce tu código:</h2>
   <input type="text" id="codigo" placeholder="Ej: TFLOW-001-1234">
   <button onclick="validarCodigo()">VALIDAR</button>
@@ -100,12 +111,10 @@
     <div class="slice slice3">15% DESCUENTO EN COMPRAS > $40.000</div>
     <div class="slice slice4">REGALO SORPRESA</div>
   </div>
-  <button id="spinBtn" onclick="girarRuleta()" style="display:none;">🎯 GIRAR</button>
+  <button id="spinBtn" onclick="girarRuleta()" style="display:none;">GIRAR</button>
+  <div id="result"></div>
 
-  <div id="resultOverlay">
-    <h1>🎉 ¡Felicidades!</h1>
-    <p id="resultText"></p>
-  </div>
+  <div id="finalMessage"></div>
 
   <script>
     const apiURL = "https://script.google.com/macros/s/AKfycbwbROxxVvIuVgEAYkaJ7G8ANntO2KwLw44-OciYDr836tMXXiMsWcpVou4HzKEM9l2H/exec";
@@ -156,9 +165,10 @@
 
       setTimeout(() => {
         const premio = opciones[index];
-        document.getElementById("resultText").innerText = premio;
-        document.getElementById("resultOverlay").style.display = "flex";
+        document.getElementById("result").innerText = `🎉 Felicidades, ganaste: ${premio}`;
         document.getElementById("spinBtn").disabled = true;
+        document.getElementById("finalMessage").innerText = `🎉 ¡Felicidades!\nGanaste: ${premio}`;
+        document.getElementById("finalMessage").style.display = "flex";
         fetch(`${apiURL}?codigo=${codigoUsado}&premio=${encodeURIComponent(premio)}`);
       }, 5200);
     }
