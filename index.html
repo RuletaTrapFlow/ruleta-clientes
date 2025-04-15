@@ -8,7 +8,7 @@
     body {
       margin: 0;
       font-family: sans-serif;
-      background-color: #f2f2f2;
+      background-color: #ffffff;
       color: #000;
       text-align: center;
       padding: 20px;
@@ -87,7 +87,6 @@
       background-color: rgba(255,255,255,0.95);
       color: #000;
       font-size: 24px;
-      display: flex;
       align-items: center;
       justify-content: center;
       z-index: 999;
@@ -167,8 +166,9 @@
         const premio = opciones[index];
         document.getElementById("result").innerText = `🎉 Felicidades, ganaste: ${premio}`;
         document.getElementById("spinBtn").disabled = true;
-        document.getElementById("finalMessage").innerText = `🎉 ¡Felicidades!\nGanaste: ${premio}`;
-        document.getElementById("finalMessage").style.display = "flex";
+        const finalMessage = document.getElementById("finalMessage");
+        finalMessage.innerText = `🎉 ¡Felicidades!\nGanaste: ${premio}`;
+        finalMessage.style.display = "flex";
         fetch(`${apiURL}?codigo=${codigoUsado}&premio=${encodeURIComponent(premio)}`);
       }, 5200);
     }
