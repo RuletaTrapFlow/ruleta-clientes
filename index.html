@@ -2,8 +2,10 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Ruleta de Premios</title>
   <style>
+    /* Estilos generales de la página */
     body {
       font-family: sans-serif;
       background-color: #f2f2f2;
@@ -14,50 +16,83 @@
       width: 160px;
       margin-bottom: 10px;
     }
-    #wheel {
+    
+    /* Contenedor para la ruleta y el puntero */
+    .wheel-container {
+      position: relative;
       width: 320px;
       height: 320px;
+      margin: 20px auto;
+    }
+    
+    /* La ruleta (círculo) */
+    #wheel {
+      width: 100%;
+      height: 100%;
       border-radius: 50%;
       border: 8px solid red;
-      margin: 20px auto;
       position: relative;
       transition: transform 5s ease-out;
     }
+    
+    /* Cada "cono" o rebanada */
     .slice {
-      width: 100%;
-      height: 100%;
+      width: 50%;
+      height: 50%;
       position: absolute;
-      clip-path: polygon(50% 50%, 100% 0%, 100% 100%);
-      transform-origin: center;
+      top: 0;
+      left: 0;
+      /* Se usa el pivote de rotación en la esquina inferior derecha,
+         que coincide con el centro del círculo (160px,160px) */
+      transform-origin: 100% 100%;
+      /* Se recorta en forma de triángulo */
+      clip-path: polygon(0% 0%, 100% 0%, 100% 100%);
       display: flex;
       align-items: center;
       justify-content: center;
-      color: white;
-      font-weight: bold;
-      text-align: center;
-      font-size: 14px;
-      padding: 10px;
+      padding: 5px;
     }
-    .slice0 { background: #e91e63; transform: rotate(0deg); }
-    .slice1 { background: #03a9f4; transform: rotate(72deg); }
-    .slice2 { background: #fbc02d; color: black; transform: rotate(144deg); }
-    .slice3 { background: #4caf50; transform: rotate(216deg); }
-    .slice4 { background: #9c27b0; transform: rotate(288deg); }
-
+    
+    /* Colores de fondo y rotaciones para cada slice */
+    .slice0 { background-color: #00bcd4; transform: rotate(0deg); }
+    .slice1 { background-color: #fbc02d; transform: rotate(72deg); }
+    .slice2 { background-color: #e91e63; transform: rotate(144deg); }
+    .slice3 { background-color: #4caf50; transform: rotate(216deg); }
+    .slice4 { background-color: #9c27b0; transform: rotate(288deg); }
+    
+    /* Cada slice contiene un <span> para el texto,
+       al que se le aplica una transformación contrarrotada
+       para que el texto se vea horizontal */
     .slice span {
-      transform: rotate(-36deg);
-      width: 60%;
+      color: white;
+      font-size: 12px;
+      text-align: center;
+      display: block;
+      transform-origin: center;
     }
-
+    .slice0 span { transform: rotate(0deg); }
+    .slice1 span { transform: rotate(-72deg); }
+    .slice2 span { transform: rotate(-144deg); }
+    .slice3 span { transform: rotate(-216deg); }
+    .slice4 span { transform: rotate(-288deg); }
+    
+    /* Triángulo rojo (puntero) posicionado sobre la ruleta.
+       Se ubica absolutamente en el contenedor de la ruleta,
+       centrado horizontalmente y un poco hacia arriba para que su punta quede sobre el borde. */
     #pointer {
+      position: absolute;
+      top: -30px; /* Ajusta este valor si es necesario */
+      left: 50%;
+      transform: translateX(-50%);
       width: 0;
       height: 0;
       border-left: 20px solid transparent;
       border-right: 20px solid transparent;
-      border-top: 30px solid red;
-      margin: auto;
+      border-bottom: 30px solid red;
+      z-index: 2;
     }
-
+    
+    /* Estilos para el botón y el input */
     input, button {
       padding: 10px;
       font-size: 16px;
@@ -65,7 +100,6 @@
       width: 90%;
       max-width: 300px;
     }
-
     #result {
       font-weight: bold;
       margin-top: 20px;
@@ -73,81 +107,10 @@
   </style>
 </head>
 <body>
-
   <img src="https://raw.githubusercontent.com/ruletatrapflow/ruleta-clientes/main/logo.png" alt="Trap Flow Oficial" class="logo">
 
   <h2>Introduce tu código:</h2>
   <input type="text" id="codigo" placeholder="Ej: TFLOW-001-1234">
   <button onclick="validarCodigo()">VALIDAR</button>
 
-  <div id="pointer"></div>
-  <div id="wheel" style="display:none;">
-    <div class="slice slice0"><span>ENVÍO GRATIS</span></div>
-    <div class="slice slice1"><span>REGALO SORPRESA</span></div>
-    <div class="slice slice2"><span>10% DESCUENTO (Máx $4.000)</span></div>
-    <div class="slice slice3"><span>15% DCTO > $40.000</span></div>
-    <div class="slice slice4"><span>REGALO SORPRESA</span></div>
-  </div>
-
-  <button id="spinBtn" onclick="girarRuleta()" style="display:none;">GIRAR</button>
-  <div id="result"></div>
-
-  <script>
-    const apiURL = "https://script.google.com/macros/s/AKfycbwbROxxVvIuVgEAYkaJ7G8ANntO2KwLw44-OciYDr836tMXXiMsWcpVou4HzKEM9l2H/exec";
-    let codigoUsado = "";
-    let puedeGirar = false;
-
-    function validarCodigo() {
-      const codigo = document.getElementById("codigo").value.trim();
-      if (!codigo) return alert("Ingresa un código.");
-
-      fetch(`${apiURL}?codigo=${codigo}`)
-        .then(res => res.text())
-        .then(data => {
-          if (data === "valido") {
-            puedeGirar = true;
-            codigoUsado = codigo;
-            document.getElementById("wheel").style.display = "block";
-            document.getElementById("spinBtn").style.display = "inline-block";
-          } else if (data === "usado") {
-            alert("Este código ya fue usado.");
-          } else {
-            alert("Código inválido.");
-          }
-        });
-    }
-
-    function girarRuleta() {
-      if (!puedeGirar) return;
-      puedeGirar = false;
-
-      const opciones = [
-        "ENVÍO GRATIS",
-        "REGALO SORPRESA",
-        "10% DESCUENTO (Máx $4.000)",
-        "15% DESCUENTO EN COMPRAS MAYORES A $40.000",
-        "REGALO SORPRESA"
-      ];
-      const pesos = [15, 30, 20, 10, 25];
-      let total = pesos.reduce((a, b) => a + b);
-      let r = Math.random() * total;
-      let sum = 0, index = 0;
-      for (let i = 0; i < pesos.length; i++) {
-        sum += pesos[i];
-        if (r < sum) { index = i; break; }
-      }
-      const angulo = 360 * 5 + index * 72 + 36;
-      document.getElementById("wheel").style.transform = `rotate(${angulo}deg)`;
-
-      setTimeout(() => {
-        const premio = opciones[index];
-        document.getElementById("result").innerText = `🎉 Felicidades, ganaste: ${premio}`;
-        document.getElementById("spinBtn").disabled = true;
-        fetch(`${apiURL}?codigo=${codigoUsado}&premio=${encodeURIComponent(premio)}`);
-      }, 5200);
-    }
-  </script>
-
-</body>
-</html>
-
+  <!-- Contenedor para la
