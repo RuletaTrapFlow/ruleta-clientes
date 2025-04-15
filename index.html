@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Ruleta de Premios</title>
   <style>
     body {
@@ -17,19 +17,17 @@
       margin-bottom: 10px;
     }
 
- #pointer {
-  width: 0;
-  height: 0;
-  border-left: 15px solid transparent;
-  border-right: 15px solid transparent;
-  border-top: 25px solid red;
-  position: relative;
-  top: 10px;
-  margin: -20px auto 0 auto;
-  z-index: 10;
-}
-
-
+    #pointer {
+      width: 0;
+      height: 0;
+      border-left: 15px solid transparent;
+      border-right: 15px solid transparent;
+      border-top: 25px solid red;
+      position: relative;
+      top: 10px;
+      margin: -20px auto 0 auto;
+      z-index: 10;
+    }
 
     #wheel {
       width: 300px;
@@ -60,12 +58,15 @@
 
     .wheel-label span {
       position: absolute;
-      width: 60px;
-      transform-origin: bottom center;
-      color: white;
-      font-weight: bold;
+      width: 100px;
+      transform-origin: center bottom;
+      transform: rotate(var(--angle)) translateY(-110px);
       text-align: center;
-      font-size: 12px;
+      color: white;
+      font-size: 14px;
+      font-weight: bold;
+      line-height: 1.2;
+      text-shadow: 1px 1px 2px black;
     }
 
     input, button {
@@ -84,25 +85,25 @@
 </head>
 <body>
 
-  <img src="https://raw.githubusercontent.com/ruletatrapflow/ruleta-clientes/main/logo.png" alt="Trap Flow Oficial" class="logo">
+  <img src="https://raw.githubusercontent.com/ruletatrapflow/ruleta-clientes/main/logo.png" alt="Trap Flow Oficial" class="logo" />
 
   <h2>Introduce tu código:</h2>
-  <input type="text" id="codigo" placeholder="Ej: TFLOW-001-1234">
+  <input type="text" id="codigo" placeholder="Ej: TFLOW-001-1234" />
   <button onclick="validarCodigo()">VALIDAR</button>
 
   <div id="pointer"></div>
 
-  <div id="wheel" style="display:none;">
+  <div id="wheel" style="display: none;">
     <div class="wheel-label">
-      <span style="transform: rotate(18deg) translateY(-130px);">ENVÍO GRATIS</span>
-      <span style="transform: rotate(90deg) translateY(-130px);">REGALO SORPRESA</span>
-      <span style="transform: rotate(162deg) translateY(-130px);">10% DTO</span>
-      <span style="transform: rotate(234deg) translateY(-130px);">15% DTO > $40K</span>
-      <span style="transform: rotate(306deg) translateY(-130px);">REGALO SORPRESA</span>
+      <span style="--angle: 18deg;">ENVÍO<br>GRATIS</span>
+      <span style="--angle: 90deg;">REGALO<br>SORPRESA</span>
+      <span style="--angle: 162deg;">10%<br>DESCUENTO</span>
+      <span style="--angle: 234deg;">15% DTO<br>COMPRA $40K</span>
+      <span style="--angle: 306deg;">REGALO<br>SORPRESA</span>
     </div>
   </div>
 
-  <button id="spinBtn" onclick="girarRuleta()" style="display:none;">GIRAR</button>
+  <button id="spinBtn" onclick="girarRuleta()" style="display: none;">GIRAR</button>
   <div id="result"></div>
 
   <script>
@@ -160,6 +161,5 @@
       }, 5200);
     }
   </script>
-
 </body>
 </html>
