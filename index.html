@@ -95,11 +95,11 @@
 
   <div id="wheel" style="display: none;">
     <div class="wheel-label">
-      <span style="--angle: 30deg;">ENVÍO<br>GRATIS</span>
-      <span style="--angle: 98deg;">REGALO<br>SORPRESA</span>
-      <span style="--angle: 180deg;">10%<br>DESCUENTO</span>
-      <span style="--angle: 270deg;">15% DTO<br>COMPRA $40K</span>
-      <span style="--angle: 327deg;">REGALO<br>SORPRESA</span>
+      <span style="--angle: 30deg;">REGALO<br>SORPRESA</span>
+      <span style="--angle: 98deg;">10%<br>DESCUENTO</span>
+      <span style="--angle: 180deg;">15%<br>DESCUENTO</span>
+      <span style="--angle: 270deg;">ENVÍO<br>GRATIS</span>
+      <span style="--angle: 327deg;">13%<br>DESCUENTO</span>
     </div>
   </div>
 
@@ -136,13 +136,13 @@
       puedeGirar = false;
 
       const opciones = [
-        "ENVÍO GRATIS",
         "REGALO SORPRESA",
-        "10% DESCUENTO (Máx $4.000)",
-        "15% DESCUENTO EN COMPRAS MAYORES A $40.000",
-        "REGALO SORPRESA"
+        "10% DE DESCUENTO",
+        "15% DE DESCUENTO",
+        "ENVÍO GRATIS",
+        "13% DE DESCUENTO"
       ];
-      const pesos = [15, 30, 20, 10, 25];
+      const pesos = [27, 30, 20, 3, 20];
       let total = pesos.reduce((a, b) => a + b);
       let r = Math.random() * total;
       let sum = 0, index = 0;
