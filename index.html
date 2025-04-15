@@ -26,26 +26,23 @@
       overflow: hidden;
     }
     .slice {
-      width: 50%;
-      height: 50%;
       position: absolute;
-      top: 50%;
-      left: 50%;
-      transform-origin: 0% 0%;
-      clip-path: polygon(0% 0%, 100% 0%, 0% 100%);
+      width: 100%;
+      height: 100%;
+      clip-path: polygon(50% 50%, 100% 0, 100% 100%);
       display: flex;
       align-items: center;
       justify-content: center;
-      color: white;
+      transform-origin: 50% 50%;
       font-size: 14px;
-      padding: 5px;
-      text-align: center;
+      color: white;
     }
-    .slice0 { background-color: #00bcd4; transform: rotate(0deg) translate(-50%, -50%); }
-    .slice1 { background-color: #fbc02d; transform: rotate(72deg) translate(-50%, -50%); color: black; }
-    .slice2 { background-color: #e91e63; transform: rotate(144deg) translate(-50%, -50%); }
-    .slice3 { background-color: #4caf50; transform: rotate(216deg) translate(-50%, -50%); }
-    .slice4 { background-color: #9c27b0; transform: rotate(288deg) translate(-50%, -50%); }
+    .slice0 { background-color: #00bcd4; transform: rotate(0deg); }
+    .slice1 { background-color: #fbc02d; transform: rotate(72deg); color: black; }
+    .slice2 { background-color: #e91e63; transform: rotate(144deg); }
+    .slice3 { background-color: #4caf50; transform: rotate(216deg); }
+    .slice4 { background-color: #9c27b0; transform: rotate(288deg); }
+
     #pointer {
       width: 0; height: 0;
       border-left: 20px solid transparent;
