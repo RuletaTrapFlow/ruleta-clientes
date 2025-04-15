@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gira y gana</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      background-color: #f2f2f2;
+      padding: 20px;
+    }
+    h2 { margin-top: 0; }
+    #inputArea, #wheelContainer, #result { margin: 20px 0; }
+    input, button {
+      font-size: 1rem;
+      padding: 10px;
+      margin-top: 10px;
+    }
+    #wheel {
+      width: 300px;
+      height: 300px;
+      border-radius: 50%;
+      border: 8px solid #d33;
+      position: relative;
+      overflow: hidden;
+      transform: rotate(0deg);
+      transition: transform 5s ease-out;
+    }
+    .slice {
+      width: 50%;
+      height: 50%;
+      position: absolute;
+      transform-origin: 100% 100%;
+      clip-path: polygon(0% 0%, 100% 0%, 100% 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      text-align: center;
+      color: white;
+    }
+    .slice0 { background-color: #00bcd4; transform: rotate(0deg); }
+    .slice1 { background-color: #fbc02d; transform: rotate(54deg); }
+    .slice2 { background-color: #e91e63; transform: rotate(126deg); }
+    .slice3 { background-color: #4caf50; transform: rotate(198deg); }
+    .slice4 { background-color: #9c27b0; transform: rotate(270deg); }
+    #pointer {
+      width: 0; height: 0;
+      border-left: 20px solid transparent;
+      border-right: 20px solid transparent;
+      border-bottom: 30px solid #d33;
+      position: absolute;
+      top: -30px;
+      left: calc(50% - 20px);
+    }
+    #spinBtn { background-color: orange; color: white; border: none; cursor: pointer; }
+    #result { font-size: 1.2rem; font-weight: bold; color: #333; }
+  </style>
+</head>
+<body>
+  <h2>Introduce tu código:</h2>
+  <div id="inputArea">
+    <input type="text" id="codigo" placeholder="Ej: ABC123">
+    <button onclick="validarCodigo()">VALIDAR</button>
+  </div>
+
+  <div id="wheelContainer" style="display:none; position:relative;">
+    <div id="pointer"></div>
+    <div id="wheel">
+      <div class="slice slice0">ENVÍO GRATIS</div>
+      <div class="slice slice1">REGALO SORPRESA</div>
+      <div class="slice slice2">10% DESCUENTO (Máx $4.000)</div>
+      <div class="slice slice3">15% DESCUENTO
+        EN COMPRAS > $40.000</div>
+      <div class="slice slice4">REGALO SORPRESA</div>
+    </div>
+    <button id="spinBtn" onclick="girarRuleta()">GIRAR</button>
+  </div>
+
+  <div id="result"></div>
+
+  <script>
+    let puedeGirar = false;
+    const apiURL = "https://script.google.com/macros/s/AKfycbzw7qQhBwROQJKlPb-5UjMo2QNUo5fFaanyYOokWlbRNG3hlfHd1dNZmmDI9W2ex36Z/exec";
+
+    function validarCodigo() {
+      const codigo = document.getElementById("codigo").value.trim();
+      if (!codigo) return alert("Ingresa un código.");
+      fetch(`${apiURL}?codigo=${codigo}`)
+        .then(res => res.text())
+        .then(data => {
+          if (data === "valido") {
+            document.getElementById("inputArea").style.display = "none";
+            document.getElementById("wheelContainer").style.display = "block";
+            puedeGirar = true;
+          } else if (data === "usado") {
+            alert("Este código ya fue usado.");
+          } else {
+            alert("Código inválido.");
+          }
+        });
+    }
+
+    function girarRuleta() {
+      if (!puedeGirar) return;
+      puedeGirar = false;
+
+      // Distribución de premios por probabilidad
+      const opciones = ["ENVÍO GRATIS", "REGALO SORPRESA", "10% DESCUENTO (Máx $4.000)", "15% DESCUENTO EN COMPRAS > $40.000"];
+      const pesos = [15, 55, 20, 10];
+
+      function elegirPremio() {
+        const total = pesos.reduce((a, b) => a + b);
+        const r = Math.random() * total;
+        let sum = 0;
+        for (let i = 0; i < pesos.length; i++) {
+          sum += pesos[i];
+          if (r < sum) return i;
+        }
+      }
+
+      const premioIndex = elegirPremio();
+      const angulo = 360 * 5 + (premioIndex * 72 + 36); // 5 vueltas + centrado
+      const rueda = document.getElementById("wheel");
+      rueda.style.transform = `rotate(${angulo}deg)`;
+
+      setTimeout(() => {
+        const premio = opciones[premioIndex];
+        document.getElementById("result").innerText = `🎉 Felicidades, ganaste: ${premio}`;
+        document.getElementById("spinBtn").disabled = true;
+      }, 5200);
+    }
+  </script>
+</body>
+</html>
