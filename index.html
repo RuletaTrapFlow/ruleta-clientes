@@ -11,6 +11,10 @@
       text-align: center;
       padding: 20px;
     }
+    img.logo {
+      width: 160px;
+      margin-bottom: 10px;
+    }
     #wheel {
       width: 300px;
       height: 300px;
@@ -61,6 +65,10 @@
   </style>
 </head>
 <body>
+
+  <!-- LOGO ENCIMA -->
+  <img src="https://raw.githubusercontent.com/ruletatrapflow/ruleta-clientes/main/logo.png" alt="Trap Flow Oficial" class="logo">
+
   <h2>Introduce tu código:</h2>
   <input type="text" id="codigo" placeholder="Ej: TFLOW-001-1234">
   <button onclick="validarCodigo()">VALIDAR</button>
@@ -85,7 +93,7 @@
       const codigo = document.getElementById("codigo").value.trim();
       if (!codigo) return alert("Ingresa un código.");
 
-      fetch(${apiURL}?codigo=${codigo})
+      fetch(`${apiURL}?codigo=${codigo}`)
         .then(res => res.text())
         .then(data => {
           if (data === "valido") {
@@ -121,13 +129,13 @@
         if (r < sum) { index = i; break; }
       }
       const angulo = 360 * 5 + index * 72 + 36;
-      document.getElementById("wheel").style.transform = rotate(${angulo}deg);
+      document.getElementById("wheel").style.transform = `rotate(${angulo}deg)`;
 
       setTimeout(() => {
         const premio = opciones[index];
-        document.getElementById("result").innerText = 🎉 Felicidades, ganaste: ${premio};
+        document.getElementById("result").innerText = `🎉 Felicidades, ganaste: ${premio}`;
         document.getElementById("spinBtn").disabled = true;
-        fetch(${apiURL}?codigo=${codigoUsado}&premio=${encodeURIComponent(premio)});
+        fetch(`${apiURL}?codigo=${codigoUsado}&premio=${encodeURIComponent(premio)}`);
       }, 5200);
     }
   </script>
