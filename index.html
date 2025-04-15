@@ -23,10 +23,8 @@
       border-left: 15px solid transparent;
       border-right: 15px solid transparent;
       border-top: 25px solid red;
-      position: absolute;
-      top: 268px; /* ¡ajustado para que toque la ruleta! */
-      left: 50%;
-      transform: translateX(-50%);
+      position: relative;
+      margin: -38px auto 0 auto; /* más pegado */
       z-index: 10;
     }
 
@@ -35,7 +33,7 @@
       height: 300px;
       border-radius: 50%;
       border: 8px solid red;
-      margin: 60px auto 20px;
+      margin: 40px auto 20px;
       position: relative;
       background: conic-gradient(
         #00bcd4 0% 20%,
@@ -56,9 +54,9 @@
 
     .wheel-label span {
       position: absolute;
-      width: 100px;
+      width: 120px;
       transform-origin: center center;
-      transform: rotate(var(--angle)) translateY(-90px); /* cerca del centro */
+      transform: rotate(var(--angle)) translateY(-90px);
       text-align: center;
       color: white;
       font-size: 14px;
@@ -89,6 +87,8 @@
   <input type="text" id="codigo" placeholder="Ej: TFLOW-001-1234" />
   <button onclick="validarCodigo()">VALIDAR</button>
 
+  <div id="pointer"></div>
+
   <div id="wheel" style="display: none;">
     <div class="wheel-label">
       <span style="--angle: 18deg;">ENVÍO<br>GRATIS</span>
@@ -98,8 +98,6 @@
       <span style="--angle: 306deg;">REGALO<br>SORPRESA</span>
     </div>
   </div>
-
-  <div id="pointer"></div>
 
   <button id="spinBtn" onclick="girarRuleta()" style="display: none;">GIRAR</button>
   <div id="result"></div>
@@ -120,7 +118,6 @@
             puedeGirar = true;
             codigoUsado = codigo;
             document.getElementById("wheel").style.display = "block";
-            document.getElementById("pointer").style.display = "block";
             document.getElementById("spinBtn").style.display = "inline-block";
           } else if (data === "usado") {
             alert("Este código ya fue usado.");
