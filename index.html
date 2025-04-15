@@ -37,11 +37,11 @@
       margin: 20px auto;
       position: relative;
       background: conic-gradient(
-        #00bcd4 0% 20%,
-        #fbc02d 20% 40%,
-        #e91e63 40% 60%,
-        #4caf50 60% 80%,
-        #9c27b0 80% 100%
+        #9c27b0 0% 27%,
+        #e91e63 27% 57%,
+        #4caf50 57% 77%,
+        #00bcd4 77% 80%,
+        #fbc02d 80% 100%
       );
       transition: transform 5s ease-out;
     }
@@ -95,11 +95,11 @@
 
   <div id="wheel" style="display: none;">
     <div class="wheel-label">
-      <span style="--angle: 30deg;">ENVÍO<br>GRATIS</span>
-      <span style="--angle: 98deg;">REGALO<br>SORPRESA</span>
-      <span style="--angle: 180deg;">10%<br>DCTO (MÁX $4.000)</span>
-      <span style="--angle: 270deg;">15% DCTO<br>EN COMPRAS MAYORES A $40.000</span>
-      <span style="--angle: 327deg;">REGALO<br>SORPRESA</span>
+      <span style="--angle: 27deg;">REGALO<br>SORPRESA</span>
+      <span style="--angle: 72deg;">10%<br>DESCUENTO</span>
+      <span style="--angle: 126deg;">15%<br>DESCUENTO</span>
+      <span style="--angle: 198deg;">ENVÍO<br>GRATIS</span>
+      <span style="--angle: 252deg;">13%<br>DESCUENTO</span>
     </div>
   </div>
 
@@ -136,13 +136,13 @@
       puedeGirar = false;
 
       const opciones = [
-        "ENVÍO GRATIS",
         "REGALO SORPRESA",
-        "10% DESCUENTO (Máx $4.000)",
-        "15% DESCUENTO EN COMPRAS MAYORES A $40.000",
-        "REGALO SORPRESA"
+        "10% DE DESCUENTO",
+        "15% DE DESCUENTO",
+        "ENVÍO GRATIS",
+        "13% DE DESCUENTO"
       ];
-      const pesos = [15, 30, 20, 10, 25];
+      const pesos = [27, 30, 20, 3, 20];
       let total = pesos.reduce((a, b) => a + b);
       let r = Math.random() * total;
       let sum = 0, index = 0;
@@ -150,7 +150,7 @@
         sum += pesos[i];
         if (r < sum) { index = i; break; }
       }
-      const angulo = 360 * 5 + index * 72 + 36;
+      const angulo = 360 * 5 + index * (360 / opciones.length) + (360 / opciones.length) / 2;
       document.getElementById("wheel").style.transform = `rotate(${angulo}deg)`;
 
       setTimeout(() => {
