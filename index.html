@@ -88,7 +88,7 @@
 <body>
   <h2>Introduce tu código:</h2>
   <div id="inputArea">
-    <input type="text" id="codigo" placeholder="Ej: ABC123">
+    <input type="text" id="codigo" placeholder="Ej: TFLOW-001-1234">
     <button onclick="validarCodigo()">VALIDAR</button>
   </div>
 
@@ -109,7 +109,7 @@
   <script>
     let puedeGirar = false;
     let codigoUsado = "";
-    const apiURL = "https://script.google.com/macros/s/AKfycbzhNilEay3-Yy8v9f3SsKXnyHelukINCo-A0h9cK9Kb1zuOovtqkbeW2zAQ8uQuTV-/exec";
+    const apiURL = "https://script.google.com/macros/s/AKfycbzphNiIEay3-Yy8v9f3SsKXnyHelukINCo-A0h9cK9Kb1zuOovtqkbeW2zAQ8uQuTV-/exec"; // REEMPLAZA ESTO
 
     function validarCodigo() {
       const codigo = document.getElementById("codigo").value.trim();
@@ -163,12 +163,10 @@
         document.getElementById("result").innerText = `🎉 Felicidades, ganaste: ${premio}`;
         document.getElementById("spinBtn").disabled = true;
 
-        // Enviar premio a Google Sheets mediante POST para asegurar entrega
+        // Enviar premio por POST
         fetch(apiURL, {
           method: "POST",
-          headers: {
-            "Content-Type": "application/json"
-          },
+          headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ codigo: codigoUsado, premio: premio })
         });
       }, 5200);
