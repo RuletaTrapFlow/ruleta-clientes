@@ -150,7 +150,7 @@
         sum += pesos[i];
         if (r < sum) { index = i; break; }
       }
-      const angulo = 360 * 5 + index * 72 + 36;
+      const angulo = 360 * 5 - index * 72;
       document.getElementById("wheel").style.transform = `rotate(${angulo}deg)`;
 
       setTimeout(() => {
